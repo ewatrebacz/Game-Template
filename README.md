@@ -1,5 +1,5 @@
-# Game Title
-## Author: Anna Szymanek
+# Snake
+## Author: Ewa Trębacz
 
 ### Short description
 
