@@ -36,6 +36,7 @@ image = pygame.image.load('IMG/author.jpg')
 author_text = pygame.image.load('IMG/author_text.png')
 snake_image = pygame.image.load('IMG/snake_image.jpg')
 background = pygame.image.load('IMG/snake_back_image.jpg')
+top10_image = pygame.image.load('IMG/top10_image.jpg')
 
 def snake(snake_part, whole_snake):
     """Draws snake.
@@ -88,32 +89,44 @@ def start_screen():
     text1 = smallfont.render('quit' , True , black)
     text2 = smallfont.render('about author', True, black) 
     text3 = smallfont.render('start', True, black)
+    text4 = smallfont.render('best scores', True, black)
 
     mouse = pygame.mouse.get_pos()
     
     if screen_width/2-50 <= mouse[0] <= screen_width/2+50 and screen_height/2-20 <= mouse[1] <= screen_height/2+20: 
         pygame.draw.rect(screen,color_light,[screen_width/2-50,screen_height/2-20,100,40])
         pygame.draw.rect(screen,color_dark,[screen_width/2-90,screen_height/2-65,180,40])
-        pygame.draw.rect(screen,color_dark,[screen_width/2-50,screen_height/2-110,100,40]) 
+        pygame.draw.rect(screen,color_dark,[screen_width/2-50,screen_height/2-110,100,40])
+        pygame.draw.rect(screen,color_dark,[screen_width/2-80,screen_height/2+25,160,40])
 
     elif screen_width/2-90 <= mouse[0] <= screen_width+90 and screen_height/2-65 <= mouse[1] <= screen_height/2-25:
         pygame.draw.rect(screen,color_light,[screen_width/2-90,screen_height/2-65,180,40])
         pygame.draw.rect(screen,color_dark,[screen_width/2-50,screen_height/2-20,100,40])
-        pygame.draw.rect(screen,color_dark,[screen_width/2-50,screen_height/2-110,100,40]) 
+        pygame.draw.rect(screen,color_dark,[screen_width/2-50,screen_height/2-110,100,40])
+        pygame.draw.rect(screen,color_dark,[screen_width/2-80,screen_height/2+25,160,40]) 
 
     elif screen_width/2-50 <= mouse[0] <= screen_width/2+50 and screen_height/2-140 <= mouse[1] <= screen_height/2-70:
         pygame.draw.rect(screen,color_light,[screen_width/2-50,screen_height/2-110,100,40])
         pygame.draw.rect(screen,color_dark,[screen_width/2-50,screen_height/2-20,100,40])
         pygame.draw.rect(screen,color_dark,[screen_width/2-90,screen_height/2-65,180,40]) 
-          
+        pygame.draw.rect(screen,color_dark,[screen_width/2-80,screen_height/2+25,160,40])
+
+    elif screen_width/2-80 <= mouse[0] <= screen_width/2+80 and screen_height/2+25 <= mouse[1] <= screen_height/2+65:
+        pygame.draw.rect(screen,color_dark,[screen_width/2-50,screen_height/2-20,100,40])
+        pygame.draw.rect(screen,color_dark,[screen_width/2-90,screen_height/2-65,180,40]) 
+        pygame.draw.rect(screen,color_dark,[screen_width/2-50,screen_height/2-110,100,40])
+        pygame.draw.rect(screen,color_light,[screen_width/2-80,screen_height/2+25,160,40])
+
     else: 
         pygame.draw.rect(screen,color_dark,[screen_width/2-50,screen_height/2-20,100,40])
         pygame.draw.rect(screen,color_dark,[screen_width/2-90,screen_height/2-65,180,40]) 
-        pygame.draw.rect(screen,color_dark,[screen_width/2-50,screen_height/2-110,100,40]) 
+        pygame.draw.rect(screen,color_dark,[screen_width/2-50,screen_height/2-110,100,40])
+        pygame.draw.rect(screen,color_dark,[screen_width/2-80,screen_height/2+25,160,40])
       
     screen.blit(text1 , (screen_width/2-25,screen_height/2-15)) 
     screen.blit(text2, (screen_width/2-75,screen_height/2-60))
     screen.blit(text3 , (screen_width/2-30,screen_height/2-105)) 
+    screen.blit(text4 , (screen_width/2-65,screen_height/2+30)) 
 
     pygame.display.update()
 
@@ -184,6 +197,54 @@ def difficulty_screen():
     screen.blit(text2, (screen_width/2-30,screen_height/2-60))
     screen.blit(text3 , (screen_width/2-25,screen_height/2-15)) 
     screen.blit(back , (5,5))
+
+    pygame.display.update()
+
+def scores_screen():
+    """Shows top 10 scores on the screen, draws back to menu button,
+    draws back to menu button and make it lighter when mouse points on it. """
+    back = smallfont.render('back to menu' , True , black)
+
+    screen.blit(top10_image,(0,0))
+    
+
+    mouse = pygame.mouse.get_pos()
+
+    if 0 <= mouse[0] <= 170 and 0 <= mouse[1] <= 40:
+        pygame.draw.rect(screen,color_light,[0,0,170,40])
+    else:
+        pygame.draw.rect(screen,color_dark,[0,0,170,40])
+
+    screen.blit(back , (5,5))
+
+    top10_list = []
+
+    with open('scores.txt') as f:
+        scores = eval(f.readlines()[0])
+        scores.sort(reverse=True)
+        top10_list = scores[0:10]
+    
+    sc1 = bigfont.render(f' #1   {top10_list[0]}' , True , black)
+    sc2 = bigfont.render(f' #2   {top10_list[1]}' , True , black)
+    sc3 = bigfont.render(f' #3   {top10_list[2]}' , True , black)
+    sc4 = bigfont.render(f' #4   {top10_list[3]}' , True , black)
+    sc5 = bigfont.render(f' #5   {top10_list[4]}' , True , black)
+    sc6 = bigfont.render(f' #6   {top10_list[5]}' , True , black)
+    sc7 = bigfont.render(f' #7   {top10_list[6]}' , True , black)
+    sc8 = bigfont.render(f' #8   {top10_list[7]}' , True , black)
+    sc9 = bigfont.render(f' #9   {top10_list[8]}' , True , black)
+    sc10 = bigfont.render(f'#10   {top10_list[9]}' , True , black)
+
+    screen.blit(sc1 , (screen_width/2-20,50))
+    screen.blit(sc2 , (screen_width/2-20,90))
+    screen.blit(sc3 , (screen_width/2-20,130))
+    screen.blit(sc4 , (screen_width/2-20,170))
+    screen.blit(sc5 , (screen_width/2-20,210))
+    screen.blit(sc6 , (screen_width/2-20,250))
+    screen.blit(sc7 , (screen_width/2-20,290))
+    screen.blit(sc8 , (screen_width/2-20,330))
+    screen.blit(sc9 , (screen_width/2-20,370))
+    screen.blit(sc10 , (screen_width/2-20,410))
 
     pygame.display.update()
 
@@ -358,14 +419,28 @@ def game_run():
                 if event.type == pygame.MOUSEBUTTONDOWN: 
                     if screen_width/2-50 <= mouse[0] <= screen_width/2+50 and screen_height/2-20 <= mouse[1] <= screen_height/2+20: 
                         start = False
-                        runnig = False 
-                        pygame.quit()
+                        running = False 
                     if screen_width/2-90 <= mouse[0] <= screen_width/2+90 and screen_height/2-65 <= mouse[1] <= screen_height/2-25:
                         start = False
                         author = True
                     if screen_width/2-50 <= mouse[0] <= screen_width/2+50 and screen_height/2-110 <= mouse[1] <= screen_height/2-70:
                         start = False
                         difficulty = True
+                    if screen_width/2-80 <= mouse[0] <= screen_width/2+80 and screen_height/2+25 <= mouse[1] <= screen_height/2+65:
+                        start = False
+                        best_scores = True
+
+        while best_scores == True:
+
+            scores_screen()
+
+            mouse = pygame.mouse.get_pos()
+
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN: 
+                    if 0 <= mouse[0] <= 170 and 0 <= mouse[1] <= 40: 
+                        best_scores = False
+                        start = True
 
         while author == True:
 
