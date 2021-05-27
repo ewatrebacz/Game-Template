@@ -429,6 +429,16 @@ def game_run():
 
             game = easy_mode()
             score = game[1]
+
+            with open('scores.txt') as f:
+                old_scores = f.readlines()
+                score_list = eval(old_scores[0])
+                score_list.append(score)
+                all_scores = score_list
+                
+            with open('scores.txt', 'w') as f:
+                f.write(str(all_scores))
+
             easy = game[0]
             close = True
 
@@ -436,6 +446,16 @@ def game_run():
 
             game = hard_mode()
             score = game[1]
+
+            with open('scores.txt') as f:
+                old_scores = f.readlines()
+                score_list = eval(old_scores[0])
+                score_list.append(score)
+                all_scores = score_list
+                
+            with open('scores.txt', 'w') as f:
+                f.write(str(all_scores))
+                
             hard = game[0]
             close = True
 
