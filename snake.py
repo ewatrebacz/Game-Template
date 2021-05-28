@@ -41,6 +41,7 @@ top10_image = pygame.image.load('IMG/top10_image.jpg')
 #sounds
 eat_sound = pygame.mixer.Sound('Sounds/eat.wav')
 lost_life_sound =  pygame.mixer.Sound('Sounds/lost_life.wav')
+game_over_sound = pygame.mixer.Sound('Sounds/game_over.wav')
 
 def snake(snake_part, whole_snake):
     """Draws snake.
@@ -291,6 +292,7 @@ def easy_mode():
 
         if x >= screen_width or x < 0 or y >= screen_height or y < 0:
             easy = False
+            game_over_sound.play()
 
         snake_new_element = []
         snake_new_element.append(x)
@@ -303,6 +305,7 @@ def easy_mode():
         for i in whole_snake[:-1]:
             if i == snake_new_element:
                easy = False
+               game_over_sound.play()
     
         if x == apple_x and y == apple_y: 
             apple_x = round(random.randrange(0, screen_width - snake_part) / 10) * 10
@@ -365,6 +368,7 @@ def hard_mode():
 
         if x >= screen_width or x < 0 or y >= screen_height or y < 0:
             hard = False
+            game_over_sound.play()
                 
         snake_new_element = []
         snake_new_element.append(x)
@@ -377,6 +381,7 @@ def hard_mode():
         for i in whole_snake[:-1]:
             if i == snake_new_element:
                 hard = False
+                game_over_sound.play()
 
         if x == apple_x and y == apple_y: 
             apple_x = round(random.randrange(0, screen_width - snake_part) / 10) * 10
@@ -391,6 +396,7 @@ def hard_mode():
                 
         if life == 0:
             hard = False
+            game_over_sound.play()
                 
         if (apple_x, apple_y) in poison_loctions:
             apple_x = round(random.randrange(0, screen_width - snake_part) / 10) * 10
