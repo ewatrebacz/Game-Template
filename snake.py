@@ -38,6 +38,9 @@ snake_image = pygame.image.load('IMG/snake_image.jpg')
 background = pygame.image.load('IMG/snake_back_image.jpg')
 top10_image = pygame.image.load('IMG/top10_image.jpg')
 
+#sounds
+eat_sound = pygame.mixer.Sound('Sounds/eat.wav')
+
 def snake(snake_part, whole_snake):
     """Draws snake.
 @param snake_part:(inf) size of one snake's part
@@ -305,6 +308,7 @@ def easy_mode():
             apple_y = round(random.randrange(0, screen_height - snake_part) / 10) * 10
             snake_length += 1
             score += 1
+            eat_sound.play()
                         
         snake(snake_part, whole_snake)
         show_score(score)
@@ -378,6 +382,7 @@ def hard_mode():
             apple_y = round(random.randrange(0, screen_height - snake_part) / 10) * 10
             snake_length += 1
             score += 1
+            eat_sound.play()
 
         if (x, y) in poison_loctions:
             life -= 1
@@ -406,6 +411,7 @@ def game_run():
     easy = False
     difficulty = False
     hard = False
+    best_scores = False
 
     while running:
 
