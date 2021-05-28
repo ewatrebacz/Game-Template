@@ -40,6 +40,7 @@ top10_image = pygame.image.load('IMG/top10_image.jpg')
 
 #sounds
 eat_sound = pygame.mixer.Sound('Sounds/eat.wav')
+lost_life_sound =  pygame.mixer.Sound('Sounds/lost_life.wav')
 
 def snake(snake_part, whole_snake):
     """Draws snake.
@@ -386,6 +387,7 @@ def hard_mode():
 
         if (x, y) in poison_loctions:
             life -= 1
+            lost_life_sound.play()
                 
         if life == 0:
             hard = False
