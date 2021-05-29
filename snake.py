@@ -38,6 +38,7 @@ snake_image = pygame.image.load('IMG/snake_image.jpg')
 background = pygame.image.load('IMG/snake_back_image.jpg')
 top10_image = pygame.image.load('IMG/top10_image.jpg')
 easy_rules_image = pygame.image.load('IMG/easy_rules.png')
+hard_rules_image = pygame.image.load('IMG/hard_rules.png')
 
 #sounds
 eat_sound = pygame.mixer.Sound('Sounds/eat.wav')
@@ -254,8 +255,8 @@ def scores_screen():
 
     pygame.display.update()
 
-def easy_rules_screen():
-    screen.blit(easy_rules_image, (0,0))
+def rules_screen(rules_image):
+    screen.blit(rules_image, (0,0))
     start_text = smallfont.render('start' , True , black)
     mouse = pygame.mouse.get_pos()
 
@@ -436,6 +437,7 @@ def game_run():
     hard = False
     best_scores = False
     easy_rules = False
+    hard_rules = False
 
     while running:
 
@@ -516,7 +518,7 @@ def game_run():
                         duo = True
                     if screen_width/2-50 <= mouse[0] <= screen_width/2+50 and screen_height/2-65 <= mouse[1] <= screen_height/2-25:
                         difficulty = False
-                        hard = True
+                        hard_rules = True
                     if screen_width/2-50 <= mouse[0] <= screen_width/2+50 and screen_height/2-110 <= mouse[1] <= screen_height/2-70:
                         difficulty = False
                         easy_rules = True
@@ -530,7 +532,7 @@ def game_run():
 
         while easy_rules == True:
 
-            easy_rules_screen()
+            rules_screen(easy_rules_image)
 
             mouse = pygame.mouse.get_pos()
 
@@ -539,6 +541,18 @@ def game_run():
                     if screen_width/2-50 <= mouse[0] <= screen_width/2+50 and 320 <= mouse[1] <= 360:
                         easy_rules = False
                         easy = True
+
+        while hard_rules == True:
+
+            rules_screen(hard_rules_image)
+
+            mouse = pygame.mouse.get_pos()
+
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN: 
+                    if screen_width/2-50 <= mouse[0] <= screen_width/2+50 and 320 <= mouse[1] <= 360:
+                        hard_rules = False
+                        hard = True
 
         score = 0
         all_scores = []
