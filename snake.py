@@ -37,6 +37,7 @@ author_text = pygame.image.load('IMG/author_text.png')
 snake_image = pygame.image.load('IMG/snake_image.jpg')
 background = pygame.image.load('IMG/snake_back_image.jpg')
 top10_image = pygame.image.load('IMG/top10_image.jpg')
+easy_rules_image = pygame.image.load('IMG/easy_rules.png')
 
 #sounds
 eat_sound = pygame.mixer.Sound('Sounds/eat.wav')
@@ -253,6 +254,20 @@ def scores_screen():
 
     pygame.display.update()
 
+def easy_rules_screen():
+    screen.blit(easy_rules_image, (0,0))
+    start_text = smallfont.render('start' , True , black)
+    mouse = pygame.mouse.get_pos()
+
+    if screen_width/2-50 <= mouse[0] <= screen_width/2+50 and 320 <= mouse[1] <= 360: 
+        pygame.draw.rect(screen,color_light,[screen_width/2-50,320,100,40])
+    else:
+        pygame.draw.rect(screen,color_dark,[screen_width/2-50,320,100,40])
+
+    screen.blit(start_text , (screen_width/2-30,325))
+
+    pygame.display.update()
+
 def easy_mode():
     """Draws the game and guides the course of the game after choosing easy level of difficulty. 
 
@@ -420,6 +435,7 @@ def game_run():
     difficulty = False
     hard = False
     best_scores = False
+    easy_rules = False
 
     while running:
 
@@ -503,7 +519,7 @@ def game_run():
                         hard = True
                     if screen_width/2-50 <= mouse[0] <= screen_width/2+50 and screen_height/2-110 <= mouse[1] <= screen_height/2-70:
                         difficulty = False
-                        easy = True
+                        easy_rules = True
                     if 0 <= mouse[0] <= 170 and 0 <= mouse[1] <= 40: 
                         difficulty = False
                         start = True
@@ -512,7 +528,20 @@ def game_run():
                         running = False
                         difficulty = False
 
+        while easy_rules == True:
+
+            easy_rules_screen()
+
+            mouse = pygame.mouse.get_pos()
+
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN: 
+                    if screen_width/2-50 <= mouse[0] <= screen_width/2+50 and 320 <= mouse[1] <= 360:
+                        easy_rules = False
+                        easy = True
+
         score = 0
+        all_scores = []
 
         while easy == True: 
 
