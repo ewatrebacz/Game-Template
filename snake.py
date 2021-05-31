@@ -39,6 +39,7 @@ background = pygame.image.load('IMG/snake_back_image.jpg')
 top10_image = pygame.image.load('IMG/top10_image.jpg')
 easy_rules_image = pygame.image.load('IMG/easy_rules.png')
 hard_rules_image = pygame.image.load('IMG/hard_rules.png')
+game_over_image = pygame.image.load('IMG/game_over.jpg')
 
 #sounds
 eat_sound = pygame.mixer.Sound('Sounds/eat.wav')
@@ -53,13 +54,39 @@ def snake(snake_part, whole_snake):
     for i in whole_snake:
         pygame.draw.rect(screen, green, [i[0], i[1], snake_part, snake_part])
 
-def text(text, color):
-    """Shows message on the screen.
-@param text:(str) Text to show
+def game_over_screen():
+    """Draws game over screen, paly again button, back to menu button and quit button,
+    makes buttons lighter when mouse points on them. """
+    screen.blit(game_over_image,(0,0))
 
-@param color:(tuple) color of text in html"""
-    message = font_style.render(text, True, color)
-    screen.blit(message, [screen_width / 6, screen_height / 3])
+    back = smallfont.render('back to menu', True ,black)
+    play_again = smallfont.render('play again' ,True ,black)
+    quit_button = smallfont.render('quit', True, black)
+
+    mouse = pygame.mouse.get_pos()
+            
+    if 0 <= mouse[0] <= 120 and 0 <= mouse[1] <= 50: 
+        pygame.draw.rect(screen,color_light,[0,0,170,40])
+        pygame.draw.rect(screen,color_dark,[25,screen_height-60,180,40])
+        pygame.draw.rect(screen,color_dark,[screen_width-125,screen_height-60,100,40])
+    elif 25 <= mouse[0] <= 205 and screen_height-60 <= mouse[1] <= screen_height-20:
+        pygame.draw.rect(screen,color_dark,[0,0,170,40])
+        pygame.draw.rect(screen,color_light,[25,screen_height-60,180,40])
+        pygame.draw.rect(screen,color_dark,[screen_width-125,screen_height-60,100,40])
+    elif screen_width-125 <= mouse[0] <= screen_width-25 and screen_height-60 <= mouse[1] <= screen_height-20:
+        pygame.draw.rect(screen,color_dark,[0,0,170,40])
+        pygame.draw.rect(screen,color_dark,[25,screen_height-60,180,40])
+        pygame.draw.rect(screen,color_light,[screen_width-125,screen_height-60,100,40])
+    else:
+        pygame.draw.rect(screen,color_dark,[0,0,170,40])
+        pygame.draw.rect(screen,color_dark,[25,screen_height-60,180,40])
+        pygame.draw.rect(screen,color_dark,[screen_width-125,screen_height-60,100,40])
+
+    screen.blit(back , (5,5))
+    screen.blit(play_again, (50, screen_height-55))
+    screen.blit(quit_button, (screen_width-100, screen_height-55))
+
+    pygame.display.update()
 
 def show_score(score):
     """Shows score on the screen.
@@ -143,14 +170,14 @@ def author_screen():
     screen.fill(white)
     screen.blit(image, (screen_width/2-60, 40))
     screen.blit(author_text, (110, 170))
-    text3= smallfont.render('back to menu' , True , black)
+    back = smallfont.render('back to menu' , True , black)
     mouse = pygame.mouse.get_pos()
             
     if 0 <= mouse[0] <= 120 and 0 <= mouse[1] <= 50: 
         pygame.draw.rect(screen,color_light,[0,0,170,40])
     else:
         pygame.draw.rect(screen,color_dark,[0,0,170,40])
-    screen.blit(text3 , (5,5))
+    screen.blit(back , (5,5))
 
     pygame.display.update()
 
@@ -256,6 +283,9 @@ def scores_screen():
     pygame.display.update()
 
 def rules_screen(rules_image):
+    """Shows the screen with the rules of chosen level of difficulty.
+    
+@param rules_image:(str) file with rules"""
     screen.blit(rules_image, (0,0))
     start_text = smallfont.render('start' , True , black)
     mouse = pygame.mouse.get_pos()
@@ -492,18 +522,20 @@ def game_run():
 
         while close == True:
 
-            screen.fill(white)
-            text("Game over! Press Q to quit or P to play again.", red)
-            show_score(score)
-            pygame.display.update()
+            game_over_screen()
+            mouse = pygame.mouse.get_pos()
 
             for event in pygame.event.get():
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_q:
-                        running = False
+                if event.type == pygame.MOUSEBUTTONDOWN: 
+                    if 0 <= mouse[0] <= 120 and 0 <= mouse[1] <= 50: 
                         close = False
-                    if event.key == pygame.K_p:
-                        game_run()
+                        start = True
+                    if 25 <= mouse[0] <= 205 and screen_height-60 <= mouse[1] <= screen_height-20:
+                        close = False
+                        difficulty = True
+                    if screen_width-125 <= mouse[0] <= screen_width-25 and screen_height-60 <= mouse[1] <= screen_height-20:
+                        close = False
+                        running = False
             
         while difficulty == True:
 
