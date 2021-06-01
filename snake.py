@@ -57,7 +57,7 @@ def snake(snake_part, whole_snake, color):
     for i in whole_snake:
         pygame.draw.rect(screen, color, [i[0], i[1], snake_part, snake_part])
 
-def game_over_screen():
+def game_over_screen(score1, score2):
     """Draws game over screen, paly again button, back to menu button and quit button,
     makes buttons lighter when mouse points on them. """
     screen.blit(game_over_image,(0,0))
@@ -88,6 +88,16 @@ def game_over_screen():
     screen.blit(back , (5,5))
     screen.blit(play_again, (50, screen_height-55))
     screen.blit(quit_button, (screen_width-100, screen_height-55))
+
+    if score2 == -1:
+        one_score = smallfont.render(f"Your score: {score1}", True, black)
+        screen.blit(one_score, (screen_width/2-50, 10))
+
+    if score2 != -1:
+        first_score = smallfont.render(f"First player's score: {score1}", True, black)
+        second_score = smallfont.render(f"Second player's score: {score2}", True, black)
+        screen.blit(first_score, (screen_width/2-50, 10))
+        screen.blit(second_score, (screen_width/2-50, 50))
 
     pygame.display.update()
 
@@ -597,6 +607,10 @@ def game_run():
     best_scores = False
     easy_rules = False
     hard_rules = False
+    duo = False
+    score = 0
+    score_friend = -1
+    all_scores = []
 
     while running:
 
@@ -651,7 +665,7 @@ def game_run():
 
         while close == True:
 
-            game_over_screen()
+            game_over_screen(score, score_friend)
             mouse = pygame.mouse.get_pos()
 
             for event in pygame.event.get():
@@ -715,9 +729,6 @@ def game_run():
                         hard_rules = False
                         hard = True
 
-        score = 0
-        all_scores = []
-
         while easy == True: 
 
             game = easy_mode()
@@ -755,6 +766,8 @@ def game_run():
         while duo == True:
 
             game = duo_mode()
+            score = game[1]
+            score_friend = game[2]
             duo = game[0]
             close = True
 
