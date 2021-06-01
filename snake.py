@@ -10,6 +10,7 @@ white = (255, 255, 255)
 black = (0, 0, 0)
 red = (255, 0, 0)
 green = (0, 128, 0)
+green_dark = (0, 51, 0)
 blue = (102, 179, 225)
 brown = (153, 102, 51)
 color_light = (170,170,170) 
@@ -46,13 +47,15 @@ eat_sound = pygame.mixer.Sound('Sounds/eat.wav')
 lost_life_sound =  pygame.mixer.Sound('Sounds/lost_life.wav')
 game_over_sound = pygame.mixer.Sound('Sounds/game_over.wav')
 
-def snake(snake_part, whole_snake):
+def snake(snake_part, whole_snake, color):
     """Draws snake.
 @param snake_part:(inf) size of one snake's part
 
-@param whole_snake:(list) list of all snake's parts"""
+@param whole_snake:(list) list of all snake's parts
+
+@param color:(tuple) color in rgb"""
     for i in whole_snake:
-        pygame.draw.rect(screen, green, [i[0], i[1], snake_part, snake_part])
+        pygame.draw.rect(screen, color, [i[0], i[1], snake_part, snake_part])
 
 def game_over_screen():
     """Draws game over screen, paly again button, back to menu button and quit button,
@@ -90,9 +93,21 @@ def game_over_screen():
 
 def show_score(score):
     """Shows score on the screen.
+
 @param score:(int) Player's score"""
     show = score_font.render(f"Your score: {str(score)}", True, blue)
     screen.blit(show, [0, 0])
+
+def duo_score(score1, score2):
+    """Shows score on the screen in duo mode.
+
+@param score1:(int) First player's score
+
+@param score2:(int) Second player's score"""
+    show1 = score_font.render(f"First player's score: {str(score1)}", True, blue)
+    screen.blit(show1, [0, 0])
+    show2 = score_font.render(f"Second player's score: {str(score2)}", True, blue)
+    screen.blit(show2, [screen_width/2, 0])
 
 def show_life(life):
     """Shows how many lives Player's has.
@@ -360,7 +375,7 @@ def easy_mode():
             score += 1
             eat_sound.play()
                         
-        snake(snake_part, whole_snake)
+        snake(snake_part, whole_snake, green)
         show_score(score)
         clock.tick(snake_velocity)
         pygame.display.update()
@@ -448,13 +463,127 @@ def hard_mode():
             apple_x = round(random.randrange(0, screen_width - snake_part) / 10) * 10
             apple_y = round(random.randrange(0, screen_height - snake_part) / 10) * 10
 
-        snake(snake_part, whole_snake)
+        snake(snake_part, whole_snake, green)
         show_score(score)
         show_life(life)
         pygame.display.update()
 
         clock.tick(snake_velocity)
     return False, score
+
+def duo_mode():
+    """Draws the game and guides the course of the game after choosing duo level. 
+
+@return:(bool, int, int) Flase when the game is over and players' scores"""
+    apple_x = round(random.randrange(0, screen_width - snake_part) / 10) * 10
+    apple_y = round(random.randrange(30, screen_height - snake_part) / 10) * 10
+    x = screen_width / 2 + 100
+    y = screen_height / 2
+    x_friend = screen_width / 2 - 100
+    y_friend = screen_height / 2
+    delta_x = 0
+    delta_y = 0
+    delta_x_friend = 0
+    delta_y_friend = 0
+    whole_snake = []
+    whole_friend = []
+    snake_length = 1
+    friend_length = 1
+    score = 0
+    score_friend = 0
+    duo = True
+
+    while duo:
+
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    delta_x = -snake_part
+                    delta_y = 0
+                elif event.key == pygame.K_RIGHT:
+                    delta_x = snake_part
+                    delta_y = 0
+                elif event.key == pygame.K_UP:
+                    delta_x = 0
+                    delta_y = -snake_part
+                elif event.key == pygame.K_DOWN:
+                    delta_x = 0
+                    delta_y = snake_part
+                elif event.key == pygame.K_a:
+                    delta_x_friend = -snake_part
+                    delta_y_friend = 0
+                elif event.key == pygame.K_d:
+                    delta_x_friend = snake_part
+                    delta_y_friend = 0
+                elif event.key == pygame.K_w:
+                    delta_x_friend = 0
+                    delta_y_friend = -snake_part
+                elif event.key == pygame.K_s:
+                    delta_x_friend = 0
+                    delta_y_friend = snake_part
+
+        screen.fill(brown)    
+        pygame.draw.rect(screen, red, [apple_x, apple_y, snake_part, snake_part]) 
+        x += delta_x
+        y += delta_y
+        x_friend += delta_x_friend
+        y_friend += delta_y_friend   
+
+        if x >= screen_width or x < 0 or y >= screen_height or y < 0:
+            duo = False
+            game_over_sound.play()
+        
+        if x_friend >= screen_width or x_friend < 0 or delta_y_friend >= screen_height or y_friend < 0:
+            duo = False
+            game_over_sound.play()
+
+        snake_new_element = []
+        snake_new_element.append(x)
+        snake_new_element.append(y)
+        whole_snake.append(snake_new_element)
+
+        friend_new_element = []
+        friend_new_element.append(x_friend)
+        friend_new_element.append(y_friend)
+        whole_friend.append(friend_new_element)
+
+        if len(whole_snake) > snake_length:
+            del whole_snake[0]   
+
+        if len(whole_friend) > friend_length:
+            del whole_friend[0] 
+
+        for i in whole_snake[:-1]:
+            if i == snake_new_element:
+               duo = False
+               game_over_sound.play()
+
+        for i in whole_friend[:-1]:
+            if i == friend_new_element:
+               duo = False
+               game_over_sound.play()
+    
+        if x == apple_x and y == apple_y: 
+            apple_x = round(random.randrange(0, screen_width - snake_part) / 10) * 10
+            apple_y = round(random.randrange(0, screen_height - snake_part) / 10) * 10
+            snake_length += 1
+            score += 1
+            eat_sound.play()
+
+        if x_friend == apple_x and y_friend == apple_y: 
+            apple_x = round(random.randrange(0, screen_width - snake_part) / 10) * 10
+            apple_y = round(random.randrange(0, screen_height - snake_part) / 10) * 10
+            friend_length += 1
+            score_friend += 1
+            eat_sound.play()
+                        
+        snake(snake_part, whole_snake, green)
+        snake(snake_part, whole_friend, green_dark)
+        duo_score(score, score_friend)
+        clock.tick(snake_velocity)
+        pygame.display.update()
+
+    return False, score, score_friend
 
 def game_run():
     """Function responsible for running the game."""
@@ -621,6 +750,12 @@ def game_run():
                 f.write(str(all_scores))
                 
             hard = game[0]
+            close = True
+
+        while duo == True:
+
+            game = duo_mode()
+            duo = game[0]
             close = True
 
     pygame.quit()
