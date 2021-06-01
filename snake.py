@@ -59,7 +59,11 @@ def snake(snake_part, whole_snake, color):
 
 def game_over_screen(score1, score2):
     """Draws game over screen, paly again button, back to menu button and quit button,
-    makes buttons lighter when mouse points on them. """
+    makes buttons lighter when mouse points on them.
+
+@param score1:(int) Score of the player (easy and hard mode) or score of the first player (duo mode)
+
+@param score2:(int) -1 (easy and hard mode) or score of the second player (duo mode)"""
     screen.blit(game_over_image,(0,0))
 
     back = smallfont.render('back to menu', True ,black)
