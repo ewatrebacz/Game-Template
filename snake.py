@@ -741,8 +741,13 @@ def game_run():
             with open('scores.txt') as f:
                 old_scores = f.readlines()
                 score_list = eval(old_scores[0])
-                score_list.append(score)
-                all_scores = score_list
+                score_list.sort(reverse=True)
+
+                if score >= score_list[-1]:
+                    score_list.append(score)
+                    score_list.sort(reverse=True)
+                
+                all_scores = score_list[:10]
                 
             with open('scores.txt', 'w') as f:
                 f.write(str(all_scores))
