@@ -41,6 +41,7 @@ top10_image = pygame.image.load('IMG/top10_image.jpg')
 easy_rules_image = pygame.image.load('IMG/easy_rules.png')
 hard_rules_image = pygame.image.load('IMG/hard_rules.png')
 game_over_image = pygame.image.load('IMG/game_over.jpg')
+duo_rules_image = pygame.image.load('IMG/duo_rules.png')
 
 #sounds
 eat_sound = pygame.mixer.Sound('Sounds/eat.wav')
@@ -93,11 +94,11 @@ def game_over_screen(score1, score2):
     screen.blit(play_again, (50, screen_height-55))
     screen.blit(quit_button, (screen_width-100, screen_height-55))
 
-    if score2 == -1:
-        one_score = smallfont.render(f"Your score: {score1}", True, black)
+    if score1 == -1:
+        one_score = smallfont.render(f"Your score: {score2}", True, black)
         screen.blit(one_score, (screen_width/2-50, 10))
 
-    if score2 != -1:
+    if score1 != -1:
         first_score = smallfont.render(f"First player's score: {score1}", True, black)
         second_score = smallfont.render(f"Second player's score: {score2}", True, black)
         screen.blit(first_score, (screen_width/2-50, 10))
@@ -319,12 +320,12 @@ def rules_screen(rules_image):
     start_text = smallfont.render('start' , True , black)
     mouse = pygame.mouse.get_pos()
 
-    if screen_width/2-50 <= mouse[0] <= screen_width/2+50 and 320 <= mouse[1] <= 360: 
-        pygame.draw.rect(screen,color_light,[screen_width/2-50,320,100,40])
+    if screen_width/2-50 <= mouse[0] <= screen_width/2+50 and 450 <= mouse[1] <= 490: 
+        pygame.draw.rect(screen,color_light,[screen_width/2-50,450,100,40])
     else:
-        pygame.draw.rect(screen,color_dark,[screen_width/2-50,320,100,40])
+        pygame.draw.rect(screen,color_dark,[screen_width/2-50,450,100,40])
 
-    screen.blit(start_text , (screen_width/2-30,325))
+    screen.blit(start_text , (screen_width/2-30,455))
 
     pygame.display.update()
 
@@ -593,7 +594,7 @@ def duo_mode():
                         
         snake(snake_part, whole_snake, green)
         snake(snake_part, whole_friend, green_dark)
-        duo_score(score, score_friend)
+        duo_score(score_friend, score)
         clock.tick(snake_velocity)
         pygame.display.update()
 
@@ -611,6 +612,7 @@ def game_run():
     best_scores = False
     easy_rules = False
     hard_rules = False
+    duo_rules = False
     duo = False
     score = 0
     score_friend = -1
@@ -669,7 +671,7 @@ def game_run():
 
         while close == True:
 
-            game_over_screen(score, score_friend)
+            game_over_screen(score_friend, score)
             mouse = pygame.mouse.get_pos()
 
             for event in pygame.event.get():
@@ -694,7 +696,7 @@ def game_run():
                 if event.type == pygame.MOUSEBUTTONDOWN: 
                     if screen_width/2-50 <= mouse[0] <= screen_width/2+50 and screen_height/2-20 <= mouse[1] <= screen_height/2+20: 
                         difficulty = False
-                        duo = True
+                        duo_rules = True
                     if screen_width/2-50 <= mouse[0] <= screen_width/2+50 and screen_height/2-65 <= mouse[1] <= screen_height/2-25:
                         difficulty = False
                         hard_rules = True
@@ -717,7 +719,7 @@ def game_run():
 
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN: 
-                    if screen_width/2-50 <= mouse[0] <= screen_width/2+50 and 320 <= mouse[1] <= 360:
+                    if screen_width/2-50 <= mouse[0] <= screen_width/2+50 and 450 <= mouse[1] <= 490:
                         easy_rules = False
                         easy = True
 
@@ -729,14 +731,27 @@ def game_run():
 
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN: 
-                    if screen_width/2-50 <= mouse[0] <= screen_width/2+50 and 320 <= mouse[1] <= 360:
+                    if screen_width/2-50 <= mouse[0] <= screen_width/2+50 and 450 <= mouse[1] <= 490:
                         hard_rules = False
                         hard = True
+
+        while duo_rules == True:
+
+            rules_screen(duo_rules_image)
+
+            mouse = pygame.mouse.get_pos()
+
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN: 
+                    if screen_width/2-50 <= mouse[0] <= screen_width/2+50 and 450 <= mouse[1] <= 490:
+                        duo_rules = False
+                        duo = True
 
         while easy == True: 
 
             game = easy_mode()
             score = game[1]
+            score_friend = -1
 
             with open('scores.txt') as f:
                 old_scores = f.readlines()
@@ -759,6 +774,7 @@ def game_run():
 
             game = hard_mode()
             score = game[1]
+            score_friend = -1
 
             with open('scores.txt') as f:
                 old_scores = f.readlines()
