@@ -1,7 +1,5 @@
 import pygame
-import time
 import random
-import os
 
 pygame.init()
 
@@ -16,13 +14,11 @@ brown = (153, 102, 51)
 color_light = (170,170,170) 
 color_dark = (100,100,100) 
             
-
 #game parametrs
 screen_width = 600
 screen_height = 500
 snake_part = 10 
 snake_velocity = 15
-font_style = pygame.font.SysFont('bahnschrift', 25)
 score_font = pygame.font.SysFont('comicsans', 35)
 smallfont = pygame.font.SysFont('comicsans',35) 
 bigfont = pygame.font.SysFont('comicsans', 60)
@@ -186,7 +182,6 @@ def start_screen():
         pygame.draw.rect(screen,color_dark,[screen_width/2-90,screen_height/2-65,180,40]) 
         pygame.draw.rect(screen,color_dark,[screen_width/2-50,screen_height/2-110,100,40])
         pygame.draw.rect(screen,color_dark,[screen_width/2-80,screen_height/2+25,160,40])
-      
     screen.blit(text1 , (screen_width/2-25,screen_height/2-15)) 
     screen.blit(text2, (screen_width/2-75,screen_height/2-60))
     screen.blit(text3 , (screen_width/2-30,screen_height/2-105)) 
@@ -271,7 +266,6 @@ def scores_screen():
 
     screen.blit(top10_image,(0,0))
     
-
     mouse = pygame.mouse.get_pos()
 
     if 0 <= mouse[0] <= 170 and 0 <= mouse[1] <= 40:
@@ -660,10 +654,6 @@ def game_run():
             mouse = pygame.mouse.get_pos()
 
             for event in pygame.event.get():
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_q:
-                        author = False
-                        running = False
                 if event.type == pygame.MOUSEBUTTONDOWN: 
                     if 0 <= mouse[0] <= 170 and 0 <= mouse[1] <= 40: 
                         author = False
@@ -799,4 +789,5 @@ def game_run():
     pygame.quit()
     quit()
 
-game_run()
+if __name__ == "__main__":
+    game_run()

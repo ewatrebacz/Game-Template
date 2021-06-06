@@ -7,11 +7,12 @@
 
 
 ### Technologies
-**name** - description
+**pygame** - cross-platform set of Python modules designed for writing video games. It includes computer graphics and sound libraries designed to be used with the Python programming language.
 
 ### How to run this app?
-1. Clone the template project, replacing my-project with the name of the project you are creating: 
-`git clone  https://github.com/github-anki/Game-Template.git my-project`
-`cd my-project `
+1. Clone the template project: 
+`git clone  https://github.com/github-anki/Game-Template.git snake`
+`cd snake`
 2. Install the project's development and runtime requirements:
 `pip install -r requirements.txt`
+3. Run the game. :smiley:
